@@ -40,64 +40,25 @@ def create_shop_list(cook_book):
     shop_list = get_shop_list_by_dishes(cook_book, dishes, person_count)
     print_shop_list(shop_list)
 
-def res_file(txt_1, txt_2, txt_3, result):
-    file_1 = []
-    file_2 = []
-    file_3 = []
-    len_1 = 0
-    len_2 = 0
-    len_3 = 0
-    with open(txt_1, encoding='utf-8') as f_1:
-        file_1 += f_1.readlines()
-    with open(txt_2, encoding='utf-8') as f_2:
-        file_2 += f_2.readlines()
-    with open(txt_3, encoding='utf-8') as f_3:
-        file_3 += f_3.readlines()
-    len_1 += len(file_1)
-    len_2 += len(file_2)
-    len_3 += len(file_3)
-    res_file_1 = ''
-    res_file_2 = ''
-    res_file_3 = ''
-    for i in file_2:
-        res_file_2 += i
-        # print(res_file_2)
-    for g in file_1:
-        res_file_1 += g
-    for h in file_3:
-        res_file_3 += h
-    results_file_1 = f"1.txt\n{len_1}\n{res_file_1}\n"
-    results_file_2 = f"2.txt\n{len_2}\n{res_file_2}\n"
-    results_file_3 = f"3.txt\n{len_3}\n{res_file_3}\n"
-    with open(result, 'a', encoding='utf-8') as res:
-        if len(file_2) < len(file_1) < len(file_3):
-            res.write(results_file_2)
-            res.write(results_file_1)
-            res.write(results_file_3)
-        elif len(file_1) < len(file_2) < len(file_3):
-            res.write(results_file_1)
-            res.write(results_file_2)
-            res.write(results_file_3)
-        elif len(file_2) < len(file_3) < len(file_1):
-            res.write(results_file_2)
-            res.write(results_file_3)
-            res.write(results_file_1)
-        elif len(file_1) < len(file_3) < len(file_2):
-            res.write(results_file_1)
-            res.write(results_file_3)
-            res.write(results_file_2)
-        elif len(file_3) < len(file_2) < len(file_1):
-            res.write(results_file_3)
-            res.write(results_file_2)
-            res.write(results_file_1)
-        else:
-            res.write(results_file_3)
-            res.write(results_file_1)
-            res.write(results_file_2)
+def compile_files(files_list):
+    data = {}
+    for file in files_list:
+        with open(file, encoding="utf-8") as f:
+            file_data = f.readlines()
+            data[len(file_data)] = (file, " ".join(file_data))
 
+    data = dict(sorted(data.items()))
+
+    with open("result.txt", "w", encoding="utf-8") as new_file:
+        for key, value in data.items():
+            new_file.write(f"{value[0]} \n")
+            new_file.write(f"{key} \n")
+            new_file.write(f"{value[1]} \n")
+
+
+files = ["1.txt", "2.txt", "3.txt"]
+files = [ (file) for file in files]
+compile_files(files)
 cook_book = get_recipes('recipes.txt')
 create_shop_list(cook_book)
-
-res_file('1.txt', '2.txt', '3.txt', 'result.txt')
-
 
